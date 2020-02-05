@@ -6069,7 +6069,7 @@ out_revert:
 }
 
 /**
-  * cgroup_cancel_fork - called if a fork failed after cgroup_can_fork()
+ * cgroup_cancel_fork - called if a fork failed after cgroup_can_fork()
   * @child: the child process
   *
   * This calls the cancel_fork() callbacks if a fork failed *after*
