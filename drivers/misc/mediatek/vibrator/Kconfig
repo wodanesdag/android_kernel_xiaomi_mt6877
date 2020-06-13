@@ -1,7 +1,7 @@
 config MTK_VIBRATOR
 	tristate "MediaTek Vibrator driver"
 	default n
-	  ---help---
+	help
 	  Vibrator driver support for MediaTek SOC.
 	  You can customize the vibrate strength and lowest vibrate time.
 	  If you want to use MediaTek Vibrator driver, say Y or M here.

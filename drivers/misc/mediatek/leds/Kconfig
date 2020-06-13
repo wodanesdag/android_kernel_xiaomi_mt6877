@@ -45,7 +45,7 @@ config LEDS_MT6357
 config LEDS_MTK_DISP
 	tristate "Mediatek display LED support"
 	depends on LEDS_CLASS
-	---help---
+	help
 	  This option enables support for Mediatek display LEDs.
 	  say 'y' to enable this
           Set n to disable.
@@ -74,7 +74,7 @@ config LEDS_MTK_I2C
 
 config CONTROL_BL_TEMPERATURE
 	bool "Support backlight controlled by thermal"
-	---help---
+	help
 	  This option enables support thermal to set max brightness.
 	  Set y to support.
 	  Set n to not support.

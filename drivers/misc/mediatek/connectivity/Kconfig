@@ -371,7 +371,7 @@ config MTK_CONN_LTE_IDC_SUPPORT
 menuconfig GPS
 	tristate "GPS drivers"
 	default n
-	---help---
+	help
 	  Say Y here for supporting GPS.
 
 config MTK_GPS_SUPPORT

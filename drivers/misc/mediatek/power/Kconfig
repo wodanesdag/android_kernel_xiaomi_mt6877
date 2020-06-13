@@ -2,7 +2,7 @@
 config MTK_PMIC
 	bool "MediaTek PMIC driver"
 	default n
-	---help---
+	help
 	  MediaTek PMIC driver.
 	  Set y to support this driver.
 	  Set n and choose other chargers.
@@ -11,7 +11,7 @@ config MTK_PMIC
 config MTK_SWITCH_INPUT_OUTPUT_CURRENT_SUPPORT
 	bool "Mediatek allow to configure input/charging current"
 	default n
-	---help---
+	help
 	Mediatek switch charger input output current.
 	Set y to support.
 	Set n to disable.
@@ -20,7 +20,7 @@ config MTK_SWITCH_INPUT_OUTPUT_CURRENT_SUPPORT
 config MTK_WIRELESS_CHARGER_SUPPORT
 	bool "Mediatek Wireless charger driver"
 	default n
-	---help---
+	help
 	yes : support wireless charger feature, it can show the wireless
 	charging animation and charging icon when receive wireless charger
 	plug-in. no: not support wireless charger feature, stay with
@@ -30,7 +30,7 @@ config MTK_WIRELESS_CHARGER_SUPPORT
 config MTK_POWER_EXT_DETECT
 	bool "MediaTek Power Ext detect"
 	default n
-	---help---
+	help
 	EVB/Phone share load configration.
 	Require one GPIO to do detection,
 	GPIO high mean EVB, otherwise mean phone platform.
