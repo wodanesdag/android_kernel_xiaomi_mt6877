@@ -888,7 +888,8 @@ static int vdec_vp9_decode(unsigned long h_vdec, struct mtk_vcodec_mem *bs,
 			memset(inst->seg_id_buf.va, 0, inst->seg_id_buf.size);
 
 			if (vsi->show_frame & BIT(2)) {
-				if (vpu_dec_start(&inst->vpu, NULL, 0)) {
+				ret = vpu_dec_start(&inst->vpu, NULL, 0);
+				if (ret) {
 					mtk_vcodec_err(inst, "vpu trig decoder failed");
 					goto DECODE_ERROR;
 				}
