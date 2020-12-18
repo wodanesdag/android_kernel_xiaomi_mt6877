@@ -1100,11 +1100,21 @@ asmlinkage long sys_readlink(const char __user *path,
 
 /* obsolete: fs/select.c */
 asmlinkage long sys_old_select(struct sel_arg_struct __user *arg);
-
-/* obsolete: fs/readdir.c */
-asmlinkage long sys_old_readdir(unsigned int, struct old_linux_dirent __user *, unsigned int);
-
-/* obsolete: kernel/sys.c */
+asmlinkage long sys_epoll_create(int size);
+asmlinkage long sys_epoll_create1(int flags);
+asmlinkage long sys_epoll_ctl(int epfd, int op, int fd,
+				struct epoll_event __user *event);
+asmlinkage long sys_epoll_wait(int epfd, struct epoll_event __user *events,
+				int maxevents, int timeout);
+asmlinkage long sys_epoll_pwait(int epfd, struct epoll_event __user *events,
+				int maxevents, int timeout,
+				const sigset_t __user *sigmask,
+				size_t sigsetsize);
+asmlinkage long sys_epoll_pwait2(int epfd, struct epoll_event __user *events,
+				 int maxevents,
+				 const struct __kernel_timespec __user *timeout,
+				 const sigset_t __user *sigmask,
+				 size_t sigsetsize);
 asmlinkage long sys_gethostname(char __user *name, int len);
 asmlinkage long sys_uname(struct old_utsname __user *);
 asmlinkage long sys_olduname(struct oldold_utsname __user *);

@@ -509,6 +509,225 @@ extern long compat_arch_ptrace(struct task_struct *child, compat_long_t request,
 			       compat_ulong_t addr, compat_ulong_t data);
 
 struct epoll_event;	/* fortunately, this one is fixed-layout */
+asmlinkage long compat_sys_epoll_pwait(int epfd,
+			struct epoll_event __user *events,
+			int maxevents, int timeout,
+			const compat_sigset_t __user *sigmask,
+			compat_size_t sigsetsize);
+asmlinkage long compat_sys_epoll_pwait2(int epfd,
+			struct epoll_event __user *events,
+			int maxevents,
+			const struct __kernel_timespec __user *timeout,
+			const compat_sigset_t __user *sigmask,
+			compat_size_t sigsetsize);
+
+asmlinkage long compat_sys_utime(const char __user *filename,
+				 struct compat_utimbuf __user *t);
+asmlinkage long compat_sys_utimensat(unsigned int dfd,
+				     const char __user *filename,
+				     struct compat_timespec __user *t,
+				     int flags);
+
+asmlinkage long compat_sys_time(compat_time_t __user *tloc);
+asmlinkage long compat_sys_stime(compat_time_t __user *tptr);
+asmlinkage long compat_sys_signalfd(int ufd,
+				    const compat_sigset_t __user *sigmask,
+				    compat_size_t sigsetsize);
+asmlinkage long compat_sys_timerfd_settime(int ufd, int flags,
+				   const struct compat_itimerspec __user *utmr,
+				   struct compat_itimerspec __user *otmr);
+asmlinkage long compat_sys_timerfd_gettime(int ufd,
+				   struct compat_itimerspec __user *otmr);
+
+asmlinkage long compat_sys_move_pages(pid_t pid, compat_ulong_t nr_pages,
+				      __u32 __user *pages,
+				      const int __user *nodes,
+				      int __user *status,
+				      int flags);
+asmlinkage long compat_sys_futimesat(unsigned int dfd,
+				     const char __user *filename,
+				     struct compat_timeval __user *t);
+asmlinkage long compat_sys_utimes(const char __user *filename,
+				  struct compat_timeval __user *t);
+asmlinkage long compat_sys_newstat(const char __user *filename,
+				   struct compat_stat __user *statbuf);
+asmlinkage long compat_sys_newlstat(const char __user *filename,
+				    struct compat_stat __user *statbuf);
+asmlinkage long compat_sys_newfstatat(unsigned int dfd,
+				      const char __user *filename,
+				      struct compat_stat __user *statbuf,
+				      int flag);
+asmlinkage long compat_sys_newfstat(unsigned int fd,
+				    struct compat_stat __user *statbuf);
+asmlinkage long compat_sys_statfs(const char __user *pathname,
+				  struct compat_statfs __user *buf);
+asmlinkage long compat_sys_fstatfs(unsigned int fd,
+				   struct compat_statfs __user *buf);
+asmlinkage long compat_sys_statfs64(const char __user *pathname,
+				    compat_size_t sz,
+				    struct compat_statfs64 __user *buf);
+asmlinkage long compat_sys_fstatfs64(unsigned int fd, compat_size_t sz,
+				     struct compat_statfs64 __user *buf);
+asmlinkage long compat_sys_fcntl64(unsigned int fd, unsigned int cmd,
+				   compat_ulong_t arg);
+asmlinkage long compat_sys_fcntl(unsigned int fd, unsigned int cmd,
+				 compat_ulong_t arg);
+asmlinkage long compat_sys_io_setup(unsigned nr_reqs, u32 __user *ctx32p);
+asmlinkage long compat_sys_io_getevents(compat_aio_context_t ctx_id,
+					compat_long_t min_nr,
+					compat_long_t nr,
+					struct io_event __user *events,
+					struct compat_timespec __user *timeout);
+asmlinkage long compat_sys_io_submit(compat_aio_context_t ctx_id, int nr,
+				     u32 __user *iocb);
+asmlinkage long compat_sys_mount(const char __user *dev_name,
+				 const char __user *dir_name,
+				 const char __user *type, compat_ulong_t flags,
+				 const void __user *data);
+asmlinkage long compat_sys_old_readdir(unsigned int fd,
+				       struct compat_old_linux_dirent __user *,
+				       unsigned int count);
+asmlinkage long compat_sys_getdents(unsigned int fd,
+				    struct compat_linux_dirent __user *dirent,
+				    unsigned int count);
+asmlinkage long compat_sys_vmsplice(int fd, const struct compat_iovec __user *,
+				    unsigned int nr_segs, unsigned int flags);
+asmlinkage long compat_sys_open(const char __user *filename, int flags,
+				umode_t mode);
+asmlinkage long compat_sys_openat(int dfd, const char __user *filename,
+				  int flags, umode_t mode);
+asmlinkage long compat_sys_open_by_handle_at(int mountdirfd,
+					     struct file_handle __user *handle,
+					     int flags);
+asmlinkage long compat_sys_truncate(const char __user *, compat_off_t);
+asmlinkage long compat_sys_ftruncate(unsigned int, compat_ulong_t);
+asmlinkage long compat_sys_pselect6(int n, compat_ulong_t __user *inp,
+				    compat_ulong_t __user *outp,
+				    compat_ulong_t __user *exp,
+				    struct compat_timespec __user *tsp,
+				    void __user *sig);
+asmlinkage long compat_sys_ppoll(struct pollfd __user *ufds,
+				 unsigned int nfds,
+				 struct compat_timespec __user *tsp,
+				 const compat_sigset_t __user *sigmask,
+				 compat_size_t sigsetsize);
+asmlinkage long compat_sys_signalfd4(int ufd,
+				     const compat_sigset_t __user *sigmask,
+				     compat_size_t sigsetsize, int flags);
+asmlinkage long compat_sys_get_mempolicy(int __user *policy,
+					 compat_ulong_t __user *nmask,
+					 compat_ulong_t maxnode,
+					 compat_ulong_t addr,
+					 compat_ulong_t flags);
+asmlinkage long compat_sys_set_mempolicy(int mode, compat_ulong_t __user *nmask,
+					 compat_ulong_t maxnode);
+asmlinkage long compat_sys_mbind(compat_ulong_t start, compat_ulong_t len,
+				 compat_ulong_t mode,
+				 compat_ulong_t __user *nmask,
+				 compat_ulong_t maxnode, compat_ulong_t flags);
+
+asmlinkage long compat_sys_setsockopt(int fd, int level, int optname,
+				      char __user *optval, unsigned int optlen);
+asmlinkage long compat_sys_sendmsg(int fd, struct compat_msghdr __user *msg,
+				   unsigned flags);
+asmlinkage long compat_sys_sendmmsg(int fd, struct compat_mmsghdr __user *mmsg,
+				    unsigned vlen, unsigned int flags);
+asmlinkage long compat_sys_recvmsg(int fd, struct compat_msghdr __user *msg,
+				   unsigned int flags);
+asmlinkage long compat_sys_recv(int fd, void __user *buf, compat_size_t len,
+				unsigned flags);
+asmlinkage long compat_sys_recvfrom(int fd, void __user *buf, compat_size_t len,
+			    unsigned flags, struct sockaddr __user *addr,
+			    int __user *addrlen);
+asmlinkage long compat_sys_recvmmsg(int fd, struct compat_mmsghdr __user *mmsg,
+				    unsigned vlen, unsigned int flags,
+				    struct compat_timespec __user *timeout);
+asmlinkage long compat_sys_nanosleep(struct compat_timespec __user *rqtp,
+				     struct compat_timespec __user *rmtp);
+asmlinkage long compat_sys_getitimer(int which,
+				     struct compat_itimerval __user *it);
+asmlinkage long compat_sys_setitimer(int which,
+				     struct compat_itimerval __user *in,
+				     struct compat_itimerval __user *out);
+asmlinkage long compat_sys_times(struct compat_tms __user *tbuf);
+asmlinkage long compat_sys_setrlimit(unsigned int resource,
+				     struct compat_rlimit __user *rlim);
+asmlinkage long compat_sys_getrlimit(unsigned int resource,
+				     struct compat_rlimit __user *rlim);
+asmlinkage long compat_sys_getrusage(int who, struct compat_rusage __user *ru);
+asmlinkage long compat_sys_sched_setaffinity(compat_pid_t pid,
+				     unsigned int len,
+				     compat_ulong_t __user *user_mask_ptr);
+asmlinkage long compat_sys_sched_getaffinity(compat_pid_t pid,
+				     unsigned int len,
+				     compat_ulong_t __user *user_mask_ptr);
+asmlinkage long compat_sys_timer_create(clockid_t which_clock,
+			struct compat_sigevent __user *timer_event_spec,
+			timer_t __user *created_timer_id);
+asmlinkage long compat_sys_timer_settime(timer_t timer_id, int flags,
+					 struct compat_itimerspec __user *new,
+					 struct compat_itimerspec __user *old);
+asmlinkage long compat_sys_timer_gettime(timer_t timer_id,
+				 struct compat_itimerspec __user *setting);
+asmlinkage long compat_sys_clock_settime(clockid_t which_clock,
+					 struct compat_timespec __user *tp);
+asmlinkage long compat_sys_clock_gettime(clockid_t which_clock,
+					 struct compat_timespec __user *tp);
+asmlinkage long compat_sys_clock_adjtime(clockid_t which_clock,
+					 struct compat_timex __user *tp);
+asmlinkage long compat_sys_clock_getres(clockid_t which_clock,
+					struct compat_timespec __user *tp);
+asmlinkage long compat_sys_clock_nanosleep(clockid_t which_clock, int flags,
+					   struct compat_timespec __user *rqtp,
+					   struct compat_timespec __user *rmtp);
+asmlinkage long compat_sys_rt_sigtimedwait(compat_sigset_t __user *uthese,
+		struct compat_siginfo __user *uinfo,
+		struct compat_timespec __user *uts, compat_size_t sigsetsize);
+asmlinkage long compat_sys_rt_sigsuspend(compat_sigset_t __user *unewset,
+					 compat_size_t sigsetsize);
+asmlinkage long compat_sys_rt_sigprocmask(int how, compat_sigset_t __user *set,
+					  compat_sigset_t __user *oset,
+					  compat_size_t sigsetsize);
+asmlinkage long compat_sys_rt_sigpending(compat_sigset_t __user *uset,
+					 compat_size_t sigsetsize);
+#ifndef CONFIG_ODD_RT_SIGACTION
+asmlinkage long compat_sys_rt_sigaction(int,
+				 const struct compat_sigaction __user *,
+				 struct compat_sigaction __user *,
+				 compat_size_t);
+#endif
+asmlinkage long compat_sys_rt_sigqueueinfo(compat_pid_t pid, int sig,
+				struct compat_siginfo __user *uinfo);
+asmlinkage long compat_sys_sysinfo(struct compat_sysinfo __user *info);
+asmlinkage long compat_sys_ioctl(unsigned int fd, unsigned int cmd,
+				 compat_ulong_t arg);
+asmlinkage long compat_sys_futex(u32 __user *uaddr, int op, u32 val,
+		struct compat_timespec __user *utime, u32 __user *uaddr2,
+		u32 val3);
+asmlinkage long compat_sys_getsockopt(int fd, int level, int optname,
+				      char __user *optval, int __user *optlen);
+asmlinkage long compat_sys_kexec_load(compat_ulong_t entry,
+				      compat_ulong_t nr_segments,
+				      struct compat_kexec_segment __user *,
+				      compat_ulong_t flags);
+asmlinkage long compat_sys_mq_getsetattr(mqd_t mqdes,
+			const struct compat_mq_attr __user *u_mqstat,
+			struct compat_mq_attr __user *u_omqstat);
+asmlinkage long compat_sys_mq_notify(mqd_t mqdes,
+			const struct compat_sigevent __user *u_notification);
+asmlinkage long compat_sys_mq_open(const char __user *u_name,
+			int oflag, compat_mode_t mode,
+			struct compat_mq_attr __user *u_attr);
+asmlinkage long compat_sys_mq_timedsend(mqd_t mqdes,
+			const char __user *u_msg_ptr,
+			compat_size_t msg_len, unsigned int msg_prio,
+			const struct compat_timespec __user *u_abs_timeout);
+asmlinkage ssize_t compat_sys_mq_timedreceive(mqd_t mqdes,
+			char __user *u_msg_ptr,
+			compat_size_t msg_len, unsigned int __user *u_msg_prio,
+			const struct compat_timespec __user *u_abs_timeout);
+asmlinkage long compat_sys_socketcall(int call, u32 __user *args);
+asmlinkage long compat_sys_sysctl(struct compat_sysctl_args __user *args);
 
 extern ssize_t compat_rw_copy_check_uvector(int type,
 		const struct compat_iovec __user *uvector,
