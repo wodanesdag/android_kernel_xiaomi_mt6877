@@ -3437,6 +3437,13 @@ void rsnApStartSaQueryTimer(IN struct ADAPTER *prAdapter,
 
 	u2PayloadLen = 2 + ACTION_SA_QUERY_TR_ID_LEN;
 
+	//BEGIN IKSWR-80158, make sure prStaRecOfAP is not null to avoid kpanic
+	if (!prBssInfo->prStaRecOfAP) {
+		DBGLOG(RSN, ERROR, "prStaRecOfAP is null\n");
+		return;
+	}
+	//END IKSWR-80158
+
 	/* 4 <3> Update information of MSDU_INFO_T */
 	TX_SET_MMPDU(prAdapter,
 		     prMsduInfo,
@@ -3593,6 +3600,13 @@ void rsnApSaQueryRequest(IN struct ADAPTER *prAdapter,
 		   ACTION_SA_QUERY_TR_ID_LEN);
 
 	u2PayloadLen = 2 + ACTION_SA_QUERY_TR_ID_LEN;
+
+	//BEGIN IKSWR-80158, make sure prStaRecOfAP is not null to avoid kpanic
+	if (!prBssInfo->prStaRecOfAP) {
+		DBGLOG(RSN, ERROR, "prStaRecOfAP is null\n");
+		return;
+	}
+	//END IKSWR-80158
 
 	/* 4 <3> Update information of MSDU_INFO_T */
 	TX_SET_MMPDU(prAdapter,
