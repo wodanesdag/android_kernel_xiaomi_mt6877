@@ -782,12 +782,12 @@ config GUP_BENCHMARK
 config ARCH_HAS_PTE_SPECIAL
 	bool
 
-config MTK_MM_DEBUG
-	bool "For MTK MM subsystem debugging"
+config LRU_GEN
+	bool "Multi-Gen LRU"
+	depends on MMU
+	# the following options can use up the spare bits in page flags
+	depends on !MAXSMP && (64BIT || !SPARSEMEM || SPARSEMEM_VMEMMAP)
 	help
-	  This config is used for MTK MM subsystem debugging,
-	  sometimes we need to use BUG() to catch specific
-	  type of errors. Wrap the debug code with this config,
-	  so we can remove the debug code by disabling it.
+	  A high performance LRU implementation to overcommit memory.
 
 endmenu
