@@ -539,6 +539,8 @@ struct kbase_csf_cpu_queue_context {
 /**
  * struct kbase_csf_heap_context_allocator - Allocator of heap contexts
  *
+ * @heap_context_size_aligned: Size of a heap context structure, in bytes,
+ *                             aligned to GPU cacheline size.
  * Heap context structures are allocated by the kernel for use by the firmware.
  * The current implementation subdivides a single GPU memory region for use as
  * a sparse array.
@@ -560,6 +562,7 @@ struct kbase_csf_heap_context_allocator {
 	u64 gpu_va;
 	struct mutex lock;
 	DECLARE_BITMAP(in_use, MAX_TILER_HEAPS);
+	u32 heap_context_size_aligned;
 };
 
 /**
