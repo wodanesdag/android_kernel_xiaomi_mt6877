@@ -1488,8 +1488,8 @@ static int kbasep_cs_tiler_heap_init(struct kbase_context *kctx,
 {
 	if (heap_init->in.group_id >= MEMORY_GROUP_MANAGER_NR_GROUPS)
 		return -EINVAL;
-
-	kctx->jit_group_id = heap_init->in.group_id;
+	else
+		kctx->jit_group_id = heap_init->in.group_id;
 
 	return kbase_csf_tiler_heap_init(kctx, heap_init->in.chunk_size,
 		heap_init->in.initial_chunks, heap_init->in.max_chunks,
