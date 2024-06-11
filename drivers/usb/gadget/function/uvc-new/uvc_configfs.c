@@ -13,8 +13,10 @@
 #include "uvc_configfs.h"
 
 #include <linux/sort.h>
-#include <linux/usb/uvc.h>
 #include <linux/usb/video.h>
+
+#include <linux/videodev2.h>
+#include <media/v4l2-uvc.h>
 
 /* -----------------------------------------------------------------------------
  * Global Utility Structures and Macros
