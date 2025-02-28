@@ -35,11 +35,6 @@
 
 #define MTK_EMI_MAX_TOKEN		4
 
-#ifdef CONFIG_MTK_EMI
-#define MTK_EMI_MAX_CMD_LEN		4096
-#endif
-
-#ifdef CONFIG_MEDIATEK_EMI
 #define MTK_EMI_MAX_CMD_LEN		256
 struct emi_addr_map {
 	int emi;
@@ -49,14 +44,12 @@ struct emi_addr_map {
 	int row;
 	int column;
 };
-#endif
 struct reg_info_t {
 	unsigned int offset;
 	unsigned int value;
 	unsigned int leng;
 };
 
-#ifdef CONFIG_MTK_EMI
 struct emicen_dev_t {
 	unsigned int emi_cen_cnt;
 	unsigned int ch_cnt;
@@ -93,28 +86,6 @@ struct emimpu_dev_t {
 	struct emimpu_region_t *ap_rg_info;
 	struct emimpu_dbg_cb *dbg_cb_list;
 };
-#endif
-#ifdef CONFIG_MEDIATEK_EMI
-struct emimpu_dev_t {
-	unsigned int region_cnt;
-	unsigned int domain_cnt;
-	unsigned int addr_align;
-	unsigned long long dram_start;
-	unsigned long long dram_end;
-	unsigned int dump_cnt;
-	unsigned int clear_reg_cnt;
-	unsigned int clear_md_reg_cnt;
-	unsigned int emi_cen_cnt;
-	struct reg_info_t *dump_reg;
-	struct reg_info_t *clear_reg;
-	struct reg_info_t *clear_md_reg;
-	void __iomem **emi_cen_base;
-	void __iomem **emi_mpu_base;
-	unsigned int show_region;
-	unsigned int ctrl_intf;
-	struct emimpu_region_t *ap_rg_info;
-};
-#endif
 struct emiisu_dev_t {
 	unsigned int buf_size;
 	void __iomem *buf_addr;
