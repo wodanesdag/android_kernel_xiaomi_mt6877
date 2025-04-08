@@ -106,6 +106,8 @@ static int battery_in_data[1] = { 0 };
 static int battery_out_data[1] = { 0 };
 static bool g_ADC_Cali;
 
+struct power_supply *max_verify_psy;
+
 static enum power_supply_property battery_props[] = {
 	POWER_SUPPLY_PROP_STATUS,
 	POWER_SUPPLY_PROP_HEALTH,
@@ -4100,11 +4102,12 @@ static int battery_callback(
 		{
 /* CHARGING FULL */
 			notify_fg_chr_full();
+			battery_update(&battery_main);
 		}
 		break;
 	case CHARGER_NOTIFY_START_CHARGING:
 		{
-/* START CHARGING */
+			/* START CHARGING */
 			fg_sw_bat_cycle_accu();
 
 			battery_main.BAT_STATUS = POWER_SUPPLY_STATUS_CHARGING;
