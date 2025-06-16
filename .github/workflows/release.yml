@@ -210,7 +210,7 @@ jobs:
           echo -e "\n💡 KernelSU Next version: $KERNELSU_NEXT_VERSION\n"
           echo -e "KERNELSU_NEXT_VERSION=$KERNELSU_NEXT_VERSION" >> $GITHUB_OUTPUT
           cd KernelSU-Next
-          curl https://raw.githubusercontent.com/wodanesdag/susfs4ksu/refs/heads/next-4.19/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch -o susfs.patch
+          curl https://raw.githubusercontent.com/wodanesdag/susfs4ksu/refs/heads/non-gki/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch -o susfs.patch
           patch -p1 < susfs.patch
           cd ../scripts
           sed -i 's/ -dirty//g' setlocalversion    
