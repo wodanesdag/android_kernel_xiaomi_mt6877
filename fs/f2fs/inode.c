@@ -224,7 +224,7 @@ static bool sanity_check_inode(struct inode *inode, struct page *node_page)
 
 	if (ino_of_node(node_page) == fi->i_xattr_nid) {
 		set_sbi_flag(sbi, SBI_NEED_FSCK);
-		f2fs_msg(sbi->sb, KERN_WARNING,
+		f2fs_warn(sbi, KERN_WARNING,
 			"%s: corrupted inode i_ino=%lx, xnid=%x, run fsck to fix.",
 			__func__, inode->i_ino, fi->i_xattr_nid);
 		return false;
