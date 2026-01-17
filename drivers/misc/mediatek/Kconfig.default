@@ -248,6 +248,7 @@ config ANDROID_DEFAULT_SETTING
 	select TASKSTATS
 	select TASK_XACCT
 	select TIMERFD
+	select TRACE_GPU_MEM
 	select TTY
 	select TUN
 	select UHID
