@@ -4577,7 +4577,8 @@ static int dpmaif_debug(unsigned char hif_id,
 
 	switch (flag) {
 	case CCCI_HIF_DEBUG_SET_WAKEUP:
-		ret = atomic_set(&dpmaif_ctrl->wakeup_src, para[0]);
+		atomic_set(&dpmaif_ctrl->wakeup_src, para[0]);
+		ret = para[0];
 		break;
 	default:
 		break;
