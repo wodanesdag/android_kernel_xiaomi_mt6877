@@ -280,12 +280,15 @@ static void flush_bg_queue(struct fuse_conn *fc)
 void fuse_request_end(struct fuse_conn *fc, struct fuse_req *req)
 {
 	struct fuse_iqueue *fiq = &fc->iq;
-	bool async;
+	void (*end)(struct fuse_conn *, struct fuse_args *, int) = NULL;
+	struct fuse_args *args;
 
 	if (test_and_set_bit(FR_FINISHED, &req->flags))
 		goto put_request;
 
-	async = req->args->end;
+	args = req->args;
+	if (args)
+		end = args->end;
 	/*
 	 * test_and_set_bit() implies smp_mb() between bit
 	 * changing and below intr_entry check. Pairs with
@@ -328,8 +331,8 @@ void fuse_request_end(struct fuse_conn *fc, struct fuse_req *req)
 		wake_up(&req->waitq);
 	}
 
-	if (async)
-		req->args->end(fc, req->args, req->out.h.error);
+	if (end)
+		end(fc, args, req->out.h.error);
 put_request:
 	fuse_put_request(fc, req);
 }
