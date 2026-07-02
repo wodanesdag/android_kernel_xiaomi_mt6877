@@ -6,7 +6,7 @@ env:
 on:
   push:
     branches:
-      - 'dev'
+      - 'susfs'
   workflow_dispatch:
 
 jobs:
@@ -208,10 +208,10 @@ jobs:
         if: ${{ env.withKernelSU == 'true' && env.withSuSFS == 'true'}}
         run: |
           echo "" > .scmversion
-          git clone -b dev https://github.com/wodanesdag/KernelSU-Next.git
+          git clone -b susfs https://github.com/wodanesdag/KernelSU-Next.git
           bash KernelSU-Next/kernel/setup.sh
           cd KernelSU-Next
-          git switch dev
+          git switch susfs
           KERNELSU_NEXT_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) + 30150)
           echo -e "\n💡 KernelSU Next version: $KERNELSU_NEXT_VERSION\n"
           echo -e "KERNELSU_NEXT_VERSION=$KERNELSU_NEXT_VERSION" >> $GITHUB_OUTPUT  
