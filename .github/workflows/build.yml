@@ -212,7 +212,7 @@ jobs:
           bash KernelSU-Next/kernel/setup.sh
           cd KernelSU-Next
           git switch susfs
-          KERNELSU_NEXT_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) + 30150)
+          KERNELSU_NEXT_VERSION=$(expr $(/usr/bin/git rev-list --count HEAD) + 30200)
           echo -e "\n💡 KernelSU Next version: $KERNELSU_NEXT_VERSION\n"
           echo -e "KERNELSU_NEXT_VERSION=$KERNELSU_NEXT_VERSION" >> $GITHUB_OUTPUT  
 
