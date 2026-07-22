@@ -1816,6 +1816,8 @@ static int ion_dma_buf_begin_cpu_access(struct dma_buf *dmabuf,
 
 	if (ion_iommu_heap_type(buffer) ||
 	    buffer->heap->type == (int)ION_HEAP_TYPE_SYSTEM) {
+		IONDBG("%s iommu device, to cache sync\n", __func__);
+
 		mutex_lock(&buffer->lock);
 		list_for_each_entry(a, &buffer->attachments, list) {
 			dma_sync_sg_for_cpu(a->dev,
@@ -1837,6 +1839,8 @@ static int ion_dma_buf_end_cpu_access(struct dma_buf *dmabuf,
 
 	if (ion_iommu_heap_type(buffer) ||
 	    buffer->heap->type == (int)ION_HEAP_TYPE_SYSTEM) {
+		IONDBG("%s iommu device, to cache sync\n", __func__);
+
 		mutex_lock(&buffer->lock);
 		list_for_each_entry(a, &buffer->attachments, list) {
 			dma_sync_sg_for_device(a->dev,
