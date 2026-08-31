@@ -44,6 +44,7 @@
 #include <linux/mm.h>
 #include <net/tcp.h>
 #include <linux/inet_diag.h>
+#include "tcp_dctcp.h"
 
 #define DCTCP_MAX_ALPHA	1024U
 
@@ -56,6 +57,7 @@ struct dctcp {
 	u32 next_seq;
 	u32 ce_state;
 	u32 loss_cwnd;
+	struct tcp_plb_state plb;
 };
 
 static unsigned int dctcp_shift_g __read_mostly = 4; /* g = 1/2^4 */
@@ -105,6 +107,8 @@ static void dctcp_init(struct sock *sk)
 		ca->ce_state = 0;
 
 		dctcp_reset(tp, ca);
+		tcp_plb_init(sk, &ca->plb);
+
 		return;
 	}
 
@@ -122,54 +126,6 @@ static u32 dctcp_ssthresh(struct sock *sk)
 
 	ca->loss_cwnd = tp->snd_cwnd;
 	return max(tp->snd_cwnd - ((tp->snd_cwnd * ca->dctcp_alpha) >> 11U), 2U);
-}
-
-/* Minimal DCTP CE state machine:
- *
- * S:	0 <- last pkt was non-CE
- *	1 <- last pkt was CE
- */
-
-static void dctcp_ce_state_0_to_1(struct sock *sk)
-{
-	struct dctcp *ca = inet_csk_ca(sk);
-	struct tcp_sock *tp = tcp_sk(sk);
-
-	if (!ca->ce_state) {
-		/* State has changed from CE=0 to CE=1, force an immediate
-		 * ACK to reflect the new CE state. If an ACK was delayed,
-		 * send that first to reflect the prior CE state.
-		 */
-		if (inet_csk(sk)->icsk_ack.pending & ICSK_ACK_TIMER)
-			__tcp_send_ack(sk, ca->prior_rcv_nxt);
-		inet_csk(sk)->icsk_ack.pending |= ICSK_ACK_NOW;
-	}
-
-	ca->prior_rcv_nxt = tp->rcv_nxt;
-	ca->ce_state = 1;
-
-	tp->ecn_flags |= TCP_ECN_DEMAND_CWR;
-}
-
-static void dctcp_ce_state_1_to_0(struct sock *sk)
-{
-	struct dctcp *ca = inet_csk_ca(sk);
-	struct tcp_sock *tp = tcp_sk(sk);
-
-	if (ca->ce_state) {
-		/* State has changed from CE=1 to CE=0, force an immediate
-		 * ACK to reflect the new CE state. If an ACK was delayed,
-		 * send that first to reflect the prior CE state.
-		 */
-		if (inet_csk(sk)->icsk_ack.pending & ICSK_ACK_TIMER)
-			__tcp_send_ack(sk, ca->prior_rcv_nxt);
-		inet_csk(sk)->icsk_ack.pending |= ICSK_ACK_NOW;
-	}
-
-	ca->prior_rcv_nxt = tp->rcv_nxt;
-	ca->ce_state = 0;
-
-	tp->ecn_flags &= ~TCP_ECN_DEMAND_CWR;
 }
 
 static void dctcp_update_alpha(struct sock *sk, u32 flags)
@@ -193,8 +149,23 @@ static void dctcp_update_alpha(struct sock *sk, u32 flags)
 
 	/* Expired RTT */
 	if (!before(tp->snd_una, ca->next_seq)) {
+		u32 delivered = tp->delivered - ca->old_delivered;
 		u64 bytes_ecn = ca->acked_bytes_ecn;
 		u32 alpha = ca->dctcp_alpha;
+		u32 ce_ratio = 0;
+
+		if (delivered > 0) {
+			/* dctcp_alpha keeps EWMA of fraction of ECN marked
+			 * packets. Because of EWMA smoothing, PLB reaction can
+			 * be slow so we use ce_ratio which is an instantaneous
+			 * measure of congestion. ce_ratio is the fraction of
+			 * ECN marked packets in the previous RTT.
+			 */
+			if (delivered_ce > 0)
+				ce_ratio = (delivered_ce << TCP_PLB_SCALE) / delivered;
+			tcp_plb_update_state(sk, &ca->plb, (int)ce_ratio);
+			tcp_plb_check_rehash(sk, &ca->plb);
+		}
 
 		/* alpha = (1 - g) * alpha + g * F */
 
@@ -238,15 +209,19 @@ static void dctcp_state(struct sock *sk, u8 new_state)
 
 static void dctcp_cwnd_event(struct sock *sk, enum tcp_ca_event ev)
 {
+	struct dctcp *ca = inet_csk_ca(sk);
+
 	switch (ev) {
 	case CA_EVENT_ECN_IS_CE:
-		dctcp_ce_state_0_to_1(sk);
-		break;
 	case CA_EVENT_ECN_NO_CE:
-		dctcp_ce_state_1_to_0(sk);
+		dctcp_ece_ack_update(sk, ev, &ca->prior_rcv_nxt, &ca->ce_state);
 		break;
 	case CA_EVENT_LOSS:
+		tcp_plb_update_state_upon_rto(sk, &ca->plb);
 		dctcp_react_to_loss(sk);
+		break;
+	case CA_EVENT_TX_START:
+		tcp_plb_check_rehash(sk, &ca->plb); /* Maybe rehash when inflight is 0 */
 		break;
 	default:
 		/* Don't care for the rest. */

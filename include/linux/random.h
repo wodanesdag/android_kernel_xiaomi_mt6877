@@ -100,6 +100,11 @@ declare_get_random_var_wait(long, unsigned long)
  */
 #include <linux/prandom.h>
 
+static inline u32 get_random_u32_below(u32 ceil)
+{
+	return prandom_u32_max(ceil);
+}
+
 #ifdef CONFIG_ARCH_RANDOM
 # include <asm/archrandom.h>
 #else
