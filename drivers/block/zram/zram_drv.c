@@ -1736,12 +1736,18 @@ static ssize_t disksize_store(struct device *dev,
 		goto out_unlock;
 	}
 
-	comp = zcomp_create(zram->compressor);
+	comp = zcomp_create(CONFIG_ZRAM_DEF_COMP);
 	if (IS_ERR(comp)) {
-		pr_err("Cannot initialise %s compressing backend\n",
-				zram->compressor);
-		err = PTR_ERR(comp);
-		goto out_free_meta;
+		comp = zcomp_create(zram->compressor);
+		if (IS_ERR(comp)) {
+			pr_err("Cannot initialise %s compressing backend\n",
+					zram->compressor);
+			err = PTR_ERR(comp);
+			goto out_free_meta;
+		}
+		strlcpy(zram->compressor, zram->compressor, sizeof(zram->compressor));
+	} else {
+		strlcpy(zram->compressor, CONFIG_ZRAM_DEF_COMP, sizeof(zram->compressor));
 	}
 
 	zram->comp = comp;
