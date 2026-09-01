@@ -9217,11 +9217,13 @@ int ufshcd_alloc_host(struct device *dev, struct ufs_hba **hba_handle)
 		goto out_error;
 	}
 
+#ifndef CONFIG_SCSI_MQ_DEFAULT
 	/*
 	 * Do not use blk-mq at this time because blk-mq does not support
 	 * runtime pm.
 	 */
 	host->use_blk_mq = false;
+#endif
 
 	hba = shost_priv(host);
 	hba->host = host;
