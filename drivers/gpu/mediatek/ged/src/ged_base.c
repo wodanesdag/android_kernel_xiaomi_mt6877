@@ -17,7 +17,7 @@ unsigned long ged_copy_to_user(void __user *pvTo, const void *pvFrom,
 	unsigned long ulBytes)
 {
 	if (access_ok(VERIFY_WRITE, pvTo, ulBytes))
-		return __copy_to_user(pvTo, pvFrom, ulBytes);
+		return raw_copy_to_user(pvTo, pvFrom, ulBytes);
 	return ulBytes;
 }
 
@@ -25,7 +25,7 @@ unsigned long ged_copy_from_user(void *pvTo, const void __user *pvFrom,
 	unsigned long ulBytes)
 {
 	if (access_ok(VERIFY_READ, pvFrom, ulBytes))
-		return __copy_from_user(pvTo, pvFrom, ulBytes);
+		return raw_copy_from_user(pvTo, pvFrom, ulBytes);
 	return ulBytes;
 }
 
