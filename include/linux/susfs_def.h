@@ -77,7 +77,11 @@
 #define ND_STATE_OPEN_LAST 64
 #define ND_STATE_LAST_SDCARD_SUS_PATH 128
 #define ND_FLAGS_LOOKUP_LAST		0x2000000
- 
+
+/* - statx request_mask => storing flag 'STATX_' (used internally by susfs, cleared before reaching userspace) */
+#define STATX_SUS_KSTAT 0x10000000U
+#define STATX_SUS_KSTAT_FUSE 0x20000000U
+
 #define MAGIC_MOUNT_WORKDIR "/debug_ramdisk/workdir"
 
 /* From KernelSU */
@@ -123,6 +127,10 @@ int data_type, susfs_fname_t file_name, u32 cookie)
 #ifndef FUSE_SUPER_MAGIC
 #define FUSE_SUPER_MAGIC 0x65735546
 #endif
+
+static inline bool susfs_is_current_app_uid(void) {
+	return ((current_uid().val % 100000) >= 10000);
+}
 
 static inline bool susfs_is_current_proc_umounted(void) {
 	return test_ti_thread_flag(&current->thread_info, TIF_PROC_UMOUNTED);
