@@ -3,7 +3,7 @@
     "kernelSource": {
       "name": "ruby",
       "repo": "https://github.com/wodanesdag/android_kernel_xiaomi_mt6877",
-      "branch": "susfs",
+      "branch": "dev",
       "device": "ruby",
       "defconfig": "ruby_defconfig"
     },
